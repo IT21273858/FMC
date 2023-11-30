@@ -1,12 +1,24 @@
 import {Medicines} from "@/models/Medicines";
 import { mongooseConnect } from "@/lib/mongoose";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handle(req, res) {
+   
     const { method } = req;
     await mongooseConnect();
+    await isAdminRequest(req,res)
+    
     if (method === 'PUT'){
-        const { title, description, price,_id,image,expirydate } = req.body;
-        await Medicines.updateOne({_id},{title,description,price,image,expirydate})
+        const { title, description, price,_id,image,expirydate,category,properties} = req.body;
+        await Medicines.updateOne({_id},{
+            title,
+            description,
+            price,
+            image,
+            expirydate,
+            category,
+            properties,
+        })
         res.json(true)
     }
     if(method === 'DELETE'){
@@ -25,16 +37,18 @@ export default async function handle(req, res) {
         
     }
     if (method === 'POST') {
-        const { title, description, price,image,expirydate} = req.body;
+        
+        const { title, description, price,image,expirydate,category,properties} = req.body;
         
         try {
-           // const decodedImage = Buffer.from(image, 'base64');
             const medicineDoc = await Medicines.create({
                 title,
                 description,
                 price,
                 image,
                 expirydate,
+                category,
+                properties,
             });
             res.status(201).json(medicineDoc);
         } catch (error) {

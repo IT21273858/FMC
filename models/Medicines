@@ -1,4 +1,4 @@
-const { Schema, model,models } = require("mongoose");
+const { Schema, model,models, default: mongoose } = require("mongoose");
 
 const MedicineSchema = new Schema({
     title: {type: String, required:true},
@@ -6,6 +6,8 @@ const MedicineSchema = new Schema({
     price: {type: Number, required: true},
     image: String,
     expirydate: {type:Date, required:true},
+    category: {type:mongoose.Types.ObjectId,ref:'Category'},
+    properties: {type:Object},
 })
 
 export const Medicines = models.Medicines || model('Medicines',MedicineSchema)

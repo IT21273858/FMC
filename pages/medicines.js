@@ -1,15 +1,19 @@
 import Layout from "@/components/Layout";
+import Loading from "@/components/Loading";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 export default function Medicines(){
     const [medicines,setMedicines] = useState([])
     const [expiringcount,setExpiringCount] =useState()
+    const [isLoading,setIsLoading] =useState(false)
     useEffect(()=>{
+        setIsLoading(true)
        axios.get('/api/medicines').then(response =>{
         setMedicines(response.data)
         const count = response.data.filter(medicines => checkExpiryDate(medicines.expirydate)).length
         setExpiringCount(count)
+        setIsLoading(false)
        })
     },[])
 
@@ -37,6 +41,14 @@ export default function Medicines(){
                 </div>
                 
             </div>
+            {
+                isLoading?(
+                <div className="flex items-center justify-center h-screen">
+                    <div>
+                        <Loading />
+                    </div>
+                </div>):(
+                
             <table className="basic mt-2 "style={{ borderRadius: '0px 20px 2px 5px', overflow: 'hidden' }}>
                 <thead>
                     <tr>
@@ -79,6 +91,7 @@ export default function Medicines(){
                 </tbody>
             </table>
             
+        )}
         </Layout>
     )
 }

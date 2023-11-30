@@ -1,6 +1,8 @@
 import axios from "axios";
 import  useRouter from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Spinner from "./Spinner";
+import Loading from "./Loading";
 const today = new Date().toISOString().split('T')[0]; // Get today's date in "YYYY-MM-DD" format
 export default function MedicineForm({
     _id,
@@ -9,38 +11,64 @@ export default function MedicineForm({
     price:existingPrice,
     image:existingImage,
     expirydate:existingDate,
+    category:existingCategory,
+    properties:assignedProperties,
 }){
 
     const [title,setTitle] = useState(existingTitle || '')
+    const [category,setCategory] = useState(existingCategory || '')
+    const [medicineProperties,setMedicineProperties] = useState(assignedProperties || {})
     const [description,setDescription] = useState(existingDecription ||'')
     const [price,setPrice] = useState(existingPrice ||'')
     const [Image,setMediImage] = useState(existingImage || {img: ''})
-    const [tmpimg,setTempimg] =useState()
+    const [tmpimg,setTempimg] = useState()
     const [imgstatus,setImgStatus] = useState(false)
+    const [isLoading,setIsLoading] = useState(false)
+    const [isUploading,setIsUploading] = useState(false)
     const [expirydate,setExpiryDate] = useState(existingDate|| '')
     const [goToMedicines,setGotoMedicines] = useState(false)
     const router = useRouter
-    async function savemedicine(ev){
+    const [categories,setCategories] = useState([])
 
+    useEffect(() => {
+        setIsLoading(true)
+        axios.get('/api/categories').then(result => {
+            setCategories(result.data)
+            setIsLoading(false)
+        })
+        
+    },[])
+    async function savemedicine(ev){
+        setIsLoading(true)
         if(expirydate<=today){
             alert("Expiry Date must be greater than today.")
+            setIsLoading(false)
             return
         }
 
         const imageBase64 = Image.img;
-        const data={title,description,price, image: imageBase64,expirydate}
+        const data={title,description,price, image: imageBase64,
+            expirydate,category,
+            properties:medicineProperties
+        }
         ev.preventDefault()
         console.log(data)
+        
         if(_id){
-            await axios.put('/api/medicines',{...data,_id})
+            await axios.put('/api/medicines',{...data,_id}).then(()=>{
+                setIsLoading(false)
+            })
+            
         }else{
         try {
             await axios.post('/api/medicines', data);
+            setIsLoading(false)
         } catch (error) {
             console.error('Error creating medicine:', error);
         }
         }
         setGotoMedicines(true)
+        
         
     }
     if(goToMedicines){
@@ -61,14 +89,41 @@ export default function MedicineForm({
     }
     
     async function uploadImages(ev){
+        setIsUploading(true)
         const file =ev.target.files[0]
         const base64 = await convertToBase64(file)
         setImgStatus(true)
         setMediImage({...Image,img: base64})
         setTempimg(base64)
+        setIsUploading(false)
+    }
+
+    function setMedicineProp(propName,value){
+        setMedicineProperties(prev => {
+            const newMedicineProps = {...prev}
+            newMedicineProps[propName] = value
+            return newMedicineProps
+        })
+    }
+
+    const propertiesToFIll = []
+    if(categories.length >0 && category){
+       let catInfo = categories.find(({_id}) => _id === category)
+      propertiesToFIll.push(...catInfo.properties)
+      while(catInfo?.parent?._id){
+        const parentCat = categories.find(({_id}) => _id === catInfo?.parent?._id)
+        propertiesToFIll.push(...parentCat.properties)
+        catInfo = parentCat
+      }
     }
     return (
         
+            isLoading?(
+            <div className="flex items-center justify-center h-screen">
+                <div>
+                    <Loading />
+                </div>
+            </div>):(
             <form onSubmit={savemedicine}>
             <label className="flex gap-1 mb-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-medicine-syrup" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> 
@@ -76,6 +131,28 @@ export default function MedicineForm({
                  </svg>
             Medicine Name</label>
             <input type="text" placeholder="Medicine Name" value={title} onChange={ev => setTitle(ev.target.value)}/>
+
+            <label>Category</label>
+            <select value={category} onChange={ev =>setCategory(ev.target.value)}>
+                <option value="">UnCategorised</option>
+                {
+                    categories.length >0 && categories.map(c => (
+                        <option value={c._id}> {c.name} </option>
+                    ))
+                }
+            </select>
+            {propertiesToFIll.length > 0 && propertiesToFIll.map(p => (
+                <div className="flex gap-1">
+                    <div> {p.name} </div>
+                    <select value={medicineProperties[p.name]} onChange={ev => setMedicineProp(p.name,ev.target.value) }>
+                        {p.values.map(v => (
+                            <option value={v}> {v} </option>
+                        ))}
+                        
+                    </select>
+                </div>
+            ))
+            }
                 <label className="flex gap-1 mb-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
@@ -91,6 +168,13 @@ export default function MedicineForm({
                     </div>
                     <input type="file" onChange={uploadImages} accept="image/*" className="hidden" id="img" name='img' />
                 </label>
+                {
+                    isUploading &&(
+                        <div className="h-24 items-center">
+                            <Spinner/>
+                            </div>
+                    )
+                }
                 <label className=" w-24 h-24 flex flex-col ml-5 ">{imgstatus?(<img src={tmpimg} style={{ maxWidth: '100px'}} className="rounded-lg " />):(<div>No Photos in this Product</div>)}</label>
                 
             </div>
@@ -114,6 +198,8 @@ export default function MedicineForm({
             <input type="number" placeholder="Price" value={price} onChange={ev => setPrice(ev.target.value)}/>
             <button type="submit" className="btn-primary">Save</button>
             </form>
+
+            )
        
     )
 }
