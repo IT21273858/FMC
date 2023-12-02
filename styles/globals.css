@@ -5,6 +5,7 @@
 
 input,textarea,select{
     @apply border-2 border-green-200 rounded-md px-1 w-full mb-2;
+    @apply shadow-sm
 }
 
 input:focus, textarea:focus,select{
@@ -26,25 +27,62 @@ label{
 
 }
 table.basic{
-    @apply w-full 
+    @apply w-full shadow-lg
 }
 table.basic thead tr td{
-    @apply bg-blue-200
+    @apply bg-blue-200 border-b-4 border-gray-200
 }
 table.basic tr td{
-    @apply border border-blue-400 p-1
+    @apply border border-blue-200 p-1
 }
 
 table.basic a{
-    @apply bg-blue-500 text-white text-sm py-1 px-2 rounded-md 
+    @apply  text-white text-sm py-1 px-2 rounded-md 
     inline-flex gap-1 mr-1
 }
 .btn-red, .btn-default{
     @apply px-4 py-1 rounded-md
 }
 .btn-red{
-    @apply bg-red-600 text-white
+    @apply bg-red-200 text-red-600 text-sm  rounded-md 
+    inline-flex gap-1 mr-1
 }
 .btn-default{
-    @apply bg-gray-400
+    @apply bg-gray-500 text-white mt-1
+}
+.font-garamond{
+    font-family: Garamond, serif;
+    font-weight: 900;
+    font-size: x-large;
+}
+
+.mainContainer {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+  }
+  .fontname{
+    font-family: Garamond, serif;
+    font-size: 40px;
+    font-weight: bold;
+  }
+  .titleContainer {
+    display: flex;
+    flex-direction: column;
+    font-size: 64px;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+  }
+.inputbtn{
+    border: none;
+    background: rgb(53, 116, 232);
+    color: white;
+    padding: 12px 24px;
+    margin: 8px;
+    font-size: 24px;
+    border-radius: 8px;
+    cursor: pointer;
 }

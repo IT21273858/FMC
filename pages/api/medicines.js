@@ -9,11 +9,13 @@ export default async function handle(req, res) {
     await isAdminRequest(req,res)
     
     if (method === 'PUT'){
-        const { title, description, price,_id,image,expirydate,category,properties} = req.body;
+        const { title,gname, description, price,quantity,_id,image,expirydate,category,properties} = req.body;
         await Medicines.updateOne({_id},{
             title,
+            gname,
             description,
             price,
+            quantity,
             image,
             expirydate,
             category,
@@ -38,13 +40,15 @@ export default async function handle(req, res) {
     }
     if (method === 'POST') {
         
-        const { title, description, price,image,expirydate,category,properties} = req.body;
+        const { title,gname, description, price,quantity,image,expirydate,category,properties} = req.body;
         
         try {
             const medicineDoc = await Medicines.create({
                 title,
+                gname,
                 description,
                 price,
+                quantity,
                 image,
                 expirydate,
                 category,
