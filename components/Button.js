@@ -42,6 +42,11 @@ export const ButtonStyle = css`
     border: 1px solid ${primary};
     color:#fff;
   `}
+  ${props => props.lowstock && !props.outline && css`
+  background-color: #fa5a41;
+  border: 1px solid #fa5a41;
+  color:#fff;
+`}
   ${props => props.primary && props.outline && css`
     background-color: transparent;
     border: 1px solid ${primary};

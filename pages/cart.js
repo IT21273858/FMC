@@ -1,7 +1,9 @@
 import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
+import ClockLoading from "@/components/ClockLoading";
 import Header from "@/components/Header";
+import Loading from "@/components/Loading";
 import Table from "@/components/Table";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -14,7 +16,7 @@ gap:40px;
 margin-top:40px;
 `
 const Box = styled.div`
-background-color:#aaa;
+background-color:#d9d4d4;
 border-radius:10px;
 padding:20px;
 `
@@ -36,11 +38,14 @@ export default function CartPage(){
     const [address,setAdress] = useState('')
     const [city,setCity] = useState('')
     const [postalcode,setPostalCode] = useState ('')
+    const [isloading,setIsLoading] = useState(false)
 
     useEffect(() => {
         if(cartMedicines.length > 0){
+            setIsLoading(true)
             axios.post('api/cart',{ids:cartMedicines}).then(response =>{
                 setMedicines(response.data)
+                setIsLoading(false)
             })
         }else {
             setMedicines([])
@@ -57,6 +62,14 @@ export default function CartPage(){
         const price = medicines.find(p => p._id === medicineId)?.price || 0
         total += price
     }
+    const checkExpiryDate = (expirydate) => {
+        const expiry = new Date(expirydate);
+        const today = new Date();
+        const differenceInTime = expiry.getTime() - today.getTime();
+        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+        return differenceInDays <= 30 && differenceInDays > 0;
+    };
     return (
         <>
         <Header/>
@@ -67,13 +80,23 @@ export default function CartPage(){
             {!cartMedicines?.length &&(
                 <div> Your Cart is Empty</div>
             ) }
-            {medicines?.length > 0 && (
-            <Table>
+            {
+                isloading?(
+                    <div className="flex items-center justify-center">
+                    <div>
+                        <ClockLoading/>
+                    </div>
+                </div>
+                ):(
+            medicines?.length > 0 && (
+            
+                <Table>
                 <thead>
                     <tr>
-                        <td> Medicine Name</td>
-                        <td> Quantity</td>
-                        <td> Price</td>
+                        <th> Medicine Name</th>
+                        <th> Expires On</th>
+                        <th> Quantity</th>
+                        <th> Price</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,6 +105,18 @@ export default function CartPage(){
                         <td>
                             {medicine.title} 
                         </td>
+                        {
+                            checkExpiryDate(medicine.expirydate)?(
+                                <td className={checkExpiryDate(medicine.expirydate)?" rounded-md bg-red-600 font-bold ":"text-center"} >
+                                    {medicine.expirydate ? new Date(medicine.expirydate).toLocaleDateString() : 'No Expiry Date'}
+                                    </td>
+                            ):(
+                                <td>
+                                    {medicine.expirydate ? new Date(medicine.expirydate).toLocaleDateString() : 'No Expiry Date'}
+                                    </td>
+                            )
+                        }
+                        
                         <td>
                             <Button white onClick ={() => lessOfThisProduct(medicine._id)}> - </Button>
                             <QuantityLabel>
@@ -98,15 +133,18 @@ export default function CartPage(){
                      <tr>
                         <td>Total</td>
                         <td></td>
-                        <td>RS.{total} </td>
+                        <td></td>
+                        <td><b><u>Rs.{total}</u>  </b> </td>
                     </tr>
+                    
                 </tbody>
             </Table>
+            )
             )}
         </Box>
         {!!cartMedicines?.length && (
             <Box>
-            <h2>Order Information</h2>
+            <h1><b> Order Information </b></h1>
             <form method="post" action="/api/checkout">
             <input type="text" placeholder="Name" value={name} name="name" onChange={ev => setName(ev.target.value)}/>
             <input type="number" placeholder="PhoneNo" value={phoneno} name="phoneno" onChange={ev => setPhoneNo(ev.target.value)}/>
@@ -116,7 +154,7 @@ export default function CartPage(){
             <input type="text" placeholder="City" value={city} name="city" onChange={ev => setCity(ev.target.value)}/>
             <input type="number" placeholder="PostalCode" value={postalcode} name="postalcode" onChange={ev => setPostalCode(ev.target.value)}/>
             </CityHolder>
-            <input type="hidden" value={cartMedicines.join(',')} nmae="medicines"/>
+            <input type="hidden" value={cartMedicines.join(',')} name="medicines"/>
             <Button  block primary type='submit'>Continue to Payment</Button>
         </form>
         </Box>

@@ -7,7 +7,12 @@ import { CartContext } from "@/components/CartContext"
 const MedicineWrapper = styled.div`
 
 `
-
+const ColumnWrapper = styled.div`
+align-items: center;
+display:grid;
+grid-template-columns: 1.2fr .8fr;
+gap:80px;
+`
 const GrayBox = styled(Link)`
 background-color:#eee;
 padding: 20px;
@@ -24,11 +29,13 @@ img{
 `
 
 const Title =styled(Link)`
+text-align: left;
 font-weight:normal;
 font-size:1rem;
 margin:0;
 color:inherit;
 text-decoration:none;
+display: block;
 
 `
 const MedicineInfoBox = styled.div`
@@ -45,7 +52,7 @@ const Price = styled.div`
 font-size:1.4rem;
 font-weight-bold;
 `
-export default function MedicineBox({_id,title,description,price,quantity,image}){
+export default function MedicineBox({_id,title,price,quantity,image}){
     const {addMedicine} = useContext(CartContext)
     const url = '/medicines/'+_id
     return (
@@ -56,15 +63,26 @@ export default function MedicineBox({_id,title,description,price,quantity,image}
                 </div>
             
             </GrayBox>
+            <ColumnWrapper>
             <Title href={url}>
             {title}
             </Title>
+            <Title href={url} >Instock: {quantity} </Title>
+            </ColumnWrapper>
+            
             <MedicineInfoBox>
                 <PriceRow>
                     <Price>
                     Rs.{price}
                     </Price>
-                    <Button onClick={() => addMedicine(_id)} primary outline><CartIcon/> </Button>
+                    {
+                        quantity <= 5 ? (
+                            <Button lowstock onClick={() => addMedicine(_id)}><CartIcon/> </Button>
+                        ):(
+                            <Button onClick={() => addMedicine(_id)} primary outline><CartIcon/> </Button>
+                        )
+                    }
+                    
                 </PriceRow>
                 
             
