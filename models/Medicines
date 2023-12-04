@@ -10,6 +10,8 @@ const MedicineSchema = new Schema({
     expirydate: {type:Date, required:true},
     category: {type:mongoose.Types.ObjectId,ref:'Category'},
     properties: {type:Object},
+},{
+    timestamps:true,
 })
 
 export const Medicines = models.Medicines || model('Medicines',MedicineSchema)

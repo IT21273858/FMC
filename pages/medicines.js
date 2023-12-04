@@ -106,7 +106,7 @@ export default function Medicines(){
                         <tr key={medicine._id}>
                             <td className={checkExpiryDate(medicine.expirydate)?" text-center rounded-md bg-red-600 font-bold ":"text-center"} > {medicine.title} </td>
                             <td className="text-center">  {medicine.gname} </td>
-                            <td className="text-justify"> {medicine.description }</td>
+                            <td className="text-left"> {medicine.description }</td>
                             <td className="text-justify"> 
                                 {
                                     medicine.properties &&  Object.entries(medicine.properties).map(([key,value]) => 
