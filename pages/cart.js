@@ -138,7 +138,7 @@ export default function CartPage(){
                 </thead>
                 <tbody>
                 {medicines.map(medicine => (
-                    <tr>
+                    <tr key={medicine._id}>
                         <td>
                             {medicine.title} 
                         </td>
