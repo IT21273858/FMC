@@ -153,17 +153,17 @@ export default function MedicineForm({
                 <option value="">UnCategorised</option>
                 {
                     categories.length >0 && categories.map(c => (
-                        <option value={c._id}> {c.name} </option>
+                        <option value={c._id} key={c._id}> {c.name} </option>
                     ))
                 }
             </select>
             {propertiesToFIll.length > 0 && propertiesToFIll.map(p => (
-                <div className="flex gap-1">
+                <div className="flex gap-1" key={p.name}>
                     <div> { p.name[0].toUpperCase()+p.name.substring(1) } : </div>
                     <div>
                     <select value={medicineProperties[p.name]} onChange={ev => setMedicineProp(p.name,ev.target.value) }>
                         {p.values.map(v => (
-                            <option value={v}> {v} </option>
+                            <option value={v} key={v}> {v} </option>
                         ))}
                         
                     </select>

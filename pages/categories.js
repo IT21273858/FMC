@@ -116,7 +116,7 @@ function Categories({swal} ){
                     <select  value={parentCategory} onChange={ev=>setParentCategory(ev.target.value)}>
                     <option value="">No Parent Category</option>
                         {categories.length >0 && categories.map(category =>(
-                        <option value={category._id}> {category.name} </option>
+                        <option value={category._id} key={category._id}> {category.name} </option>
                     ))}
                      </select>
                 </div>
@@ -125,7 +125,7 @@ function Categories({swal} ){
                     <label className="block">Properties</label>
                     <button onClick={addProperty} type="button" className="btn-default text-sm mb-2">Add new Property</button>
                     { properties.length > 0 && properties.map((property,index) => (
-                            <div className="flex gap-1 mb-2">
+                            <div className="flex gap-1 mb-2" key={property.name}>
                                 <input type="text" className="mb-0" value={property.name} onChange={ev => handlePropertyNameChange(index,property,ev.target.value)} placeholder="property name (Percentage)"/>
                                 <input type="text" className="mb-0" value={property.values} onChange={ev => handlePropertyValuesChange(index,property,ev.target.value)} placeholder="values, comma seperated"/>
                                 <button type="button" onClick={() => removeProperty(index)} className="btn-red text-sm">Remove</button>
@@ -161,7 +161,7 @@ function Categories({swal} ){
                 </thead>
                 <tbody>
                     {categories.length >0 && categories.map(category =>(
-                        <tr>
+                        <tr key={category.name}>
                             <td> {category.name}   </td>
                             <td> {category?.parent?.name} </td>
                             <td className="text-center">

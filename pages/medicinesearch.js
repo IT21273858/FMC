@@ -107,7 +107,7 @@ export default function MedicineSearchPage(){
                             </div>
                         ):(
                             searchResults.map((medicine) =>
-                            <MedicineBox {...medicine} >
+                            <MedicineBox {...medicine} key={medicine._id} >
                                 <Button onClick= {() =>handleAddtoCart(medicine._id)}></Button>
                                 </MedicineBox>
                         ))

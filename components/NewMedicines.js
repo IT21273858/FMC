@@ -62,7 +62,7 @@ export default function NewMedicines(medicines){
                 <hr/>
                 <MedicineGrid>
                 {medicines?.medicines?.length > 0 && medicines?.medicines?.map(medicine => (
-                        <MedicineBox {...medicine}/>                
+                        <MedicineBox {...medicine} key={medicine}/>                
                     ))
                 }
             </MedicineGrid>
@@ -79,7 +79,7 @@ export default function NewMedicines(medicines){
                 <hr/>
                 <MedicineGrid>
                     {displayedmedicines?.length >0 && displayedmedicines?.map(allmedicine =>(
-                        <MedicineBox {...allmedicine}/>
+                        <MedicineBox {...allmedicine} key={allmedicine}/>
                     ))}
                 </MedicineGrid>
             </>)
