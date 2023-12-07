@@ -42,7 +42,7 @@ return (
             </div>
         </div>):(
             <div>
-                <h1 className="text-center">Do you really want to delete &nbsp;"{medicineInfo?.title}"? </h1>
+                <h1 className="text-center">Do you really want to delete &nbsp;&quot;{medicineInfo?.title}&quot;? </h1>
        <div className="flex gap-2 justify-center">
        <button className="px-4 py-1 btn-red mt-1" onClick={deleteMedicine}>Yes</button>
         <button onClick={goback} className="btn-default">No</button>
