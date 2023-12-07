@@ -1,11 +1,11 @@
 import Layout from "@/components/Layout";
-import  useRouter  from "next/router";
+import  {useRouter}  from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "@/components/Loading";
 
 export default function DeleteProductPage(){
-    const router = useRouter
+    const router = useRouter()
     const {id} = router.query
     const [medicineInfo,setMedicineInfo] = useState()
     const [isLoading,setIsLoading] = useState(false)

@@ -89,7 +89,7 @@ export default function OrdersPage(){
                         <td className="text-center">
                             {order.line_items.map(l => (
                                 total += l.price_data?.medicine_data.unit_amount,
-                                <Row>
+                                <Row key={l._id}>
                                     <Column>
                                     {l.price_data?.medicine_data.name} x {l.quantity}
                                     </Column>
@@ -101,7 +101,7 @@ export default function OrdersPage(){
                                    <Column>
                                     {
                                         l.categoryinfo.cinfo &&  Object.entries(l.categoryinfo.cinfo).map(([key,value]) => 
-                                            <div key={key} className="text-left" >
+                                            <div key={l.categoryinfo.cinfo.key} className="text-left" >
                                                 {key} : {value}
                                             </div> )
                                     }
