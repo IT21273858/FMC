@@ -61,5 +61,11 @@ export default async function handle(req, res) {
     } else {
         res.status(405).json({ error: 'Method Not Allowed' });
     }
+
+    if(method === 'UPDATE'){
+        const {_id,quantity} =req.body;
+        await Medicines.updateOne({_id},{quantity});
+        res.json(true)
+    }
     
 }

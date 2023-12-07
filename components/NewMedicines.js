@@ -7,13 +7,16 @@ import Loading from "./Loading"
 import Button from "@/components/Button"
 const MedicineGrid= styled.div`
 display:grid;
-grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-columns: 1fr 1fr ;
 gap:20px;
 padding-top: 10px;
+@media screen and (min-width:768px){
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 `
 const Title = styled.h2`
 font-size:2rem;
-margin:30px 0 5px ;
+margin:5px 0 5px ;
 `
 const Wrapper = styled.div`
 justify-content: end;
@@ -26,7 +29,7 @@ export default function NewMedicines(medicines){
     const [allmedicines,setMedicines] = useState([])
     const [isloading,setIsLoading] = useState(false)
     const [displayedmedicines,setDisplayedMedicines] = useState([])
-    const [visibleItems,setVisibleItems] = useState(2)
+    const [visibleItems,setVisibleItems] = useState(4)
     
     useEffect(()=>{
         setIsLoading(true)
@@ -41,7 +44,7 @@ export default function NewMedicines(medicines){
         setDisplayedMedicines(allmedicines.slice(0,visibleItems))
     },[visibleItems,allmedicines])
     const handleMoreClicks = () =>{
-        setVisibleItems(prevVisibleItems => prevVisibleItems + 4)
+        setVisibleItems(prevVisibleItems => prevVisibleItems + 8)
     }
     return (
         <>
@@ -68,28 +71,21 @@ export default function NewMedicines(medicines){
             <Wrapper>
             <Title>All Medicines</Title>
                 {displayedmedicines.length < allmedicines.length && (
-                       <div className="mt-10">
+                       <div className="mt-4">
                          <Button primary onClick ={handleMoreClicks}>More</Button>
                         </div> 
                 )}
             </Wrapper>
-               
-                
                 <hr/>
-               
                 <MedicineGrid>
-                    {displayedmedicines?.length >0 && displayedmedicines.map(allmedicine =>(
+                    {displayedmedicines?.length >0 && displayedmedicines?.map(allmedicine =>(
                         <MedicineBox {...allmedicine}/>
                     ))}
                 </MedicineGrid>
-                
-           
             </>)
         }
         
         </>
-        
-        
         
     )
 }

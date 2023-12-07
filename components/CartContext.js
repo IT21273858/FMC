@@ -29,8 +29,11 @@ export function CartContextProvider({children}){
             return prev
         })
     }
+    function clearCart(){
+        setCartMedicines([])
+    }
     return (
-        <CartContext.Provider value={{cartMedicines,setCartMedicines,addMedicine,removeMedicine}}>
+        <CartContext.Provider value={{cartMedicines,setCartMedicines,addMedicine,removeMedicine,clearCart}}>
              {children}
         </CartContext.Provider>
     )

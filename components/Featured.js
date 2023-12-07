@@ -7,12 +7,12 @@ const Bg = styled.div`
 background-color:#4ddbeb;
 padding: 10px 0;
 display:flex;
-align-items: center;
-justify-content: space-between;
+align-items: right;
+justify-content: flex-end;
 `
 
 const Title = styled.h1`
-margin:0;
+margin:0 10px 5px ;
 font-weight:normal;
 `
 
@@ -35,8 +35,6 @@ margin-top:40px;
 export default function Featured(){
     return(
         <Bg>
-            <Center>
-               
                 <div className="flex items-center justify-center">
                     <Title>Search Medicines Here</Title>
                     
@@ -49,10 +47,6 @@ export default function Featured(){
                         </Button>
                     </Link>
                     </div>
-              
-            
-            </Center>
-            
         </Bg>
     )
 }

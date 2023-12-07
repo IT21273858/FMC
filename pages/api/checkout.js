@@ -1,5 +1,6 @@
 import { mongooseConnect } from "@/lib/mongoose"
 import {Medicines} from "@/models/Medicines"
+import { Order } from "@/models/Order"
 export default async function handle(req,res){
     if(req.method !== 'POST'){
         res.json('Should be a POST request')
@@ -7,14 +8,15 @@ export default async function handle(req,res){
     }
 
     const {
-        name,phoneno,nic,
-        address,city,postalcode,
-        medicines,
+        name,phoneno,nic,email,
+        address,city,
+        cartMedicines,
     } = req.body
     await mongooseConnect()
-    const medicinesId =medicines?.split(',')
+    const medicinesId =cartMedicines
     const uniqueIds = [...new Set(medicinesId)]
     const medicinesInfos = await Medicines.find({_id:uniqueIds})
+    
 
     let line_items = []
     for(const medicineId of uniqueIds){
@@ -26,12 +28,31 @@ export default async function handle(req,res){
                 price_data:{
                     currency: 'RS',
                     medicine_data:{
-                        name:medicineinfo.name,
+                        name:medicineinfo.title,
                         unit_amount:quantity*medicineinfo.price,
-                    }
+                    },
+                },
+                categoryinfo:{
+                    cinfo:medicineinfo.properties
                 }
-            })}
-            res.json({line_items})
+            })
+            try {
+                // Deduct the quantity from the available stock
+                await Medicines.updateOne(
+                    { _id: medicineId },
+                    { $inc: { quantity: -quantity } }
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+                 
     }
-    
+    const orderDoc = await Order.create({
+        line_items,name,phoneno,nic,email,address,city,paid:true,
+    })
+    res.json({
+        orderDoc
+    })
 }
+

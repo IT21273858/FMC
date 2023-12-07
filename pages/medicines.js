@@ -13,16 +13,21 @@ export default function Medicines(){
 
     useEffect(()=>{
         setIsLoading(true)
-       axios.get('/api/medicines').then(response =>{
-        setMedicines(response.data)
-        const count = response.data.filter(medicines => checkExpiryDate(medicines.expirydate)).length
-        setExpiringCount(count)
+        try {
+            axios.get('/api/medicines').then(response =>{
+                setMedicines(response.data)
+                const count = response.data.filter(medicines => checkExpiryDate(medicines.expirydate)).length
+                setExpiringCount(count)
+                
         
-
-        const quantity = response.data.filter(medicines => checkQuantity(medicines.quantity)).length
-        setQuantityCount(quantity)
-        setIsLoading(false)
-       })
+                const quantity = response.data.filter(medicines => checkQuantity(medicines.quantity)).length
+                setQuantityCount(quantity)
+                setIsLoading(false)
+               })
+        } catch (error) {
+            console.log(error)
+        }
+       
       
     },[])
 

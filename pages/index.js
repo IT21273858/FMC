@@ -1,16 +1,22 @@
 import Featured from "@/components/Featured";
 import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import NewMedicines from "@/components/NewMedicines";
 import { mongooseConnect } from "@/lib/mongoose";
 import {Medicines} from "@/models/Medicines"
+import { useSession } from "next-auth/react";
 
 export default function Home({featuredMedicine,newMedicines}) {
+  const {data:session} = useSession()
  return(
-        <div>
+  
+    !session ?(<Layout/>):(
+      <div>
            <Header/>
            <Featured medicine={featuredMedicine}/>
            <NewMedicines medicines={newMedicines}/>      
   </div>
+    )
  )
 }
 

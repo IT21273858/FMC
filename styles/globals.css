@@ -40,6 +40,20 @@ table.basic a{
     @apply  text-white text-sm py-1 px-2 rounded-md 
     inline-flex gap-1 mr-1
 }
+table.secondary{
+    @apply w-full shadow-lg rounded-lg
+}
+table.secondary thead th {
+    @apply border-blue-400 p-1 rounded-lg
+}
+table.secondary tr td{
+    @apply border-y-2 border-x-2 border-blue-400 p-1 rounded-lg
+}
+
+table.secondary a{
+    @apply  text-white text-sm py-1 px-2 rounded-md 
+    inline-flex gap-1 mr-1
+}
 .btn-red, .btn-default{
     @apply px-4 py-1 rounded-md
 }
