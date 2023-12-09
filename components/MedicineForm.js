@@ -56,7 +56,7 @@ export default function MedicineForm({
             properties:medicineProperties
         }
         ev.preventDefault()
-        console.log(data)
+        
         
         if(_id){
             await axios.put('/api/medicines',{...data,_id}).then(()=>{
