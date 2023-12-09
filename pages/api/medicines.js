@@ -31,11 +31,11 @@ export default async function handle(req, res) {
     }
     if(method === 'GET'){
         if(req.query?.id){
-            const medicineslistid=await Medicines.findOne({_id:req.query.id})
-            res.json(medicineslistid)
+            
+            res.json(await Medicines.findOne({_id:req.query.id}))
         }else{
-            const medicinelist=await Medicines.find()
-            res.json(medicinelist)
+           
+            res.json(await Medicines.find())
         }      
       
         
