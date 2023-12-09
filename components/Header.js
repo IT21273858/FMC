@@ -32,7 +32,7 @@ padding:10px 0;
 }
 `
 const StyledNav = styled.nav`
-${props => props.mobnavActivie ?`
+${props => props.mobnavactivie ?`
 display: block;
 ` : `
 display: none;
@@ -73,7 +73,7 @@ export default function Header({children}){
         await router.push('/')
         await signOut()
     }
-    const [mobnavActivie,setMobNavActive] = useState(false)
+    const [mobnavactivie,setMobNavActive] = useState(false)
 
     return (
         <StyledHeader>
@@ -86,7 +86,7 @@ export default function Header({children}){
                     <Logos href={'/'}> <Logo/></Logos>
                 </Center>
                 
-            <StyledNav mobnavActivie={mobnavActivie}>
+            <StyledNav mobnavactivie={mobnavactivie}>
                 <NavLink href={'/'}>Home</NavLink>
                 <NavLink href={'/medicinesearch'}>Find</NavLink>
                 <NavLink href={'/ucategories'}>Categories</NavLink>

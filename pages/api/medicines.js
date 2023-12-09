@@ -1,4 +1,4 @@
-import {Medicines} from "@/models/Medicines";
+import { Medicines } from "@/models/Medicines";
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "./auth/[...nextauth]";
 
@@ -31,9 +31,11 @@ export default async function handle(req, res) {
     }
     if(method === 'GET'){
         if(req.query?.id){
-            res.json(await Medicines.findOne({_id:req.query.id}))
+            const medicineslistid=await Medicines.findOne({_id:req.query.id})
+            res.json(medicineslistid)
         }else{
-            res.json(await Medicines.find())
+            const medicinelist=await Medicines.find()
+            res.json(medicinelist)
         }      
       
         

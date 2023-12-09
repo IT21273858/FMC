@@ -1,5 +1,3 @@
-// Assuming this is your backend API route: api/medicines.js
-
 import { Medicines } from "@/models/Medicines";
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "./auth/[...nextauth]";
