@@ -8,7 +8,11 @@ export default async function handle(req, res) {
     await mongooseConnect();
     await isAdminRequest(req,res)
     
-    if (method === 'PUT'){
+    if(method === 'UPDATE'){
+        const {_id,quantity} =req.body;
+        await Medicines.updateOne({_id},{quantity});
+        res.json(true)
+    }else if (method === 'PUT'){
         const { title,gname, description, price,quantity,_id,image,expirydate,category,properties} = req.body;
         await Medicines.updateOne({_id},{
             title,
@@ -22,14 +26,12 @@ export default async function handle(req, res) {
             properties,
         })
         res.json(true)
-    }
-    if(method === 'DELETE'){
+    }else if(method === 'DELETE'){
         if(req.query?.id){
             await Medicines.deleteOne({_id:req.query?.id})
             res.json(true)
         }
-    }
-    if(method === 'GET'){
+    }else if(method === 'GET'){
         if(req.query?.id){
             
             res.json(await Medicines.findOne({_id:req.query.id}))
@@ -39,8 +41,7 @@ export default async function handle(req, res) {
         }      
       
         
-    }
-    if (method === 'POST') {
+    }else if (method === 'POST') {
         
         const { title,gname, description, price,quantity,image,expirydate,category,properties} = req.body;
         
@@ -64,10 +65,6 @@ export default async function handle(req, res) {
         res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    if(method === 'UPDATE'){
-        const {_id,quantity} =req.body;
-        await Medicines.updateOne({_id},{quantity});
-        res.json(true)
-    }
+    
     
 }
