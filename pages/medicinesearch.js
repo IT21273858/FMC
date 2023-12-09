@@ -31,7 +31,7 @@ export default function MedicineSearchPage(){
     const [isloading,setIsLoading] =useState(false)
     const handleSearch = async () => {
         setIsLoading(true)
-        const response = await fetch(`/api/medicinesearch?search=${searchItem}`);
+        const response = await fetch(`api/medicinesearch?search=${searchItem}`);
 
         const data = await response.json()
         if(data.length ===0){
