@@ -14,7 +14,7 @@ export default function Medicines(){
     useEffect(()=>{
         setIsLoading(true)
         try {
-            axios.get('/api/medicines').then(response =>{
+            axios.get('api/medicines').then(response =>{
                 setMedicines(response.data)
                 const count = response.data.filter(medicines => checkExpiryDate(medicines.expirydate)).length
                 setExpiringCount(count)
