@@ -33,7 +33,7 @@ export default function NewMedicines(medicines){
     
     useEffect(()=>{
         setIsLoading(true)
-       axios.get('api/medicines').then(response =>{
+       axios.get('https://fmc-one.vercel.app/api/medicines/api/medicines').then(response =>{
         setMedicines(response.data)
         setIsLoading(false)
        })
