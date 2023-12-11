@@ -8,6 +8,11 @@ export default function Layout({children}) {
   const { data: session } = useSession();
   if(!session){
     return (
+      <>
+      
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4814665916153316"
+     crossorigin="anonymous"></script>
+        
       <div className="flex flex-col">
       <div className="fontname bg-blue-300 flex justify-center items-center p-2 ">
         Family medical care
@@ -36,7 +41,7 @@ export default function Layout({children}) {
 
     </div>
     
-    
+    </>
   )
   }
   const toggleNav = () => {
