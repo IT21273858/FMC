@@ -91,7 +91,7 @@ export default function Header({children}){
             <StyledNav mobnavactivie={mobnavactivie}>
                 <NavLink href={'/'}>Home</NavLink>
                 <NavLink href={'/medicinesearch'}>Find</NavLink>
-                <NavLink href={'/ucategories'}>Categories</NavLink>
+                <NavLink href={'/privacy'}>Policy</NavLink>
                 <NavLink href={'/adminuser'}>Admin</NavLink>
                 <NavLink href={'/cart'}>Cart ({cartMedicines?.length})</NavLink>
                 <NavLink href={'/'} onClick={logout}>LogOut</NavLink>
