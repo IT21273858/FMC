@@ -77,6 +77,8 @@ export default function Header({children}){
 
     return (
         <StyledHeader>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4814665916153316"
+     crossorigin="anonymous"></script>
             <Center>
                 <Wrapper>
                 <div className="text-black-400 flex justify-between" >
